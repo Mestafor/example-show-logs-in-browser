@@ -7,9 +7,10 @@ http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url);
 
   if(parsedUrl.pathname === '/logs') {
-    // Show list
+    // Show files list
     fs.readdir(path.join(__dirname, 'logs'), (err, data) => {
       if(!err && data.length > 0) {
+        // Write list to response
         res.setHeader('Content-type', 'text/html');
         res.write('<a href="/">Back</a> </br><hr>');
         res.end(
@@ -26,8 +27,10 @@ http.createServer((req, res) => {
   } else if(parsedUrl.pathname.indexOf('/logs/') > -1) {
     res.setHeader('Content-type', 'text/html');
     const pathToFile = path.join(__dirname, parsedUrl.pathname)
+    // Read file from local path
     fs.readFile(pathToFile, (err, data) => {
       if(!err && data) {
+        // Write to response data
         res.write('<a href="/logs">Back</a><hr>');
         res.write(`<strong>File local path: <em>${pathToFile}</em></strong> </br><hr>`);
         res.end(`<pre>${data}</pre>`);
